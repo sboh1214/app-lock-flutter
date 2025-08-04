@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "748560218794",
+    "project_id": "app-lock-flutter-87244",
+    "storage_bucket": "app-lock-flutter-87244.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:748560218794:android:d1d1505009b0be0b3b2ed3",
+        "android_client_info": {
+          "package_name": "dev.sboh.app_lock_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaon2AB-D6Vi0qX023Mo0T_Y58qB9fvX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
