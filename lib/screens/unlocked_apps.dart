@@ -3,12 +3,12 @@ import 'dart:ui';
 import 'package:app_lock_flutter/executables/controllers/method_channel_controller.dart';
 import 'package:app_lock_flutter/executables/controllers/password_controller.dart';
 import 'package:app_lock_flutter/widgets/confirmation_dialog.dart';
-import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
+import 'package:installed_apps/app_info.dart';
 import 'package:lottie/lottie.dart';
 import 'package:app_lock_flutter/screens/search.dart';
 import '../executables/controllers/apps_controller.dart';
@@ -27,9 +27,9 @@ class UnlockedAppScreen extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           leading: Padding(
             padding: const EdgeInsets.all(6.0),
             child: Container(
@@ -72,7 +72,7 @@ class UnlockedAppScreen extends StatelessWidget {
           centerTitle: true,
           title: Text(
             "AppLock",
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: Colors.white,
                 ),
           ),
@@ -186,7 +186,7 @@ class UnlockedAppScreen extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       itemCount: appsController.unLockList.length,
                       itemBuilder: (context, index) {
-                        Application app = appsController.unLockList[index];
+                        AppInfo app = appsController.unLockList[index];
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
@@ -223,10 +223,10 @@ class UnlockedAppScreen extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  child: app is ApplicationWithIcon
+                                  child: app is AppInfo
                                       ? CircleAvatar(
                                           backgroundImage:
-                                              MemoryImage(app.icon),
+                                              MemoryImage(app.icon!),
                                           backgroundColor: Theme.of(context)
                                               .primaryColorDark,
                                         )
@@ -247,17 +247,17 @@ class UnlockedAppScreen extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        app.appName,
+                                        app.name,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyText1!
+                                            .bodyLarge!
                                             .copyWith(color: Colors.white),
                                       ),
                                       Text(
                                         "${app.versionName}",
                                         style: Theme.of(context)
                                             .textTheme
-                                            .subtitle1!
+                                            .titleMedium!
                                             .copyWith(
                                               color: Colors.white,
                                               fontSize: 12,
@@ -285,7 +285,7 @@ class UnlockedAppScreen extends StatelessWidget {
                                             Theme.of(context).primaryColorDark,
                                         toggleSize: 20.0,
                                         value: appsController.selectLockList
-                                            .contains(app.appName),
+                                            .contains(app.name),
                                         borderRadius: 30.0,
                                         padding: 2.0,
                                         showOnOff: false,

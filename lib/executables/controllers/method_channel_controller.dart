@@ -54,7 +54,6 @@ class MethodChannelController extends GetxController implements GetxService {
           return {
             "app_name": e.application!.appName,
             "package_name": e.application!.packageName,
-            "file_path": e.application!.apkFilePath,
           };
         }).toList()
       };

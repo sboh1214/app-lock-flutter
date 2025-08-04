@@ -35,30 +35,18 @@ class ApplicationData {
   ApplicationData({
     required this.appName,
     this.icon,
-    required this.apkFilePath,
     required this.packageName,
     required this.versionName,
     required this.versionCode,
-    required this.dataDir,
-    required this.systemApp,
     required this.installTimeMillis,
-    required this.updateTimeMillis,
-    required this.category,
-    required this.enabled,
   });
 
   String appName;
   Uint8List? icon;
-  String apkFilePath;
   String packageName;
   String versionName;
   String versionCode;
-  String dataDir;
-  bool systemApp;
   String installTimeMillis;
-  String updateTimeMillis;
-  String category;
-  bool enabled;
 
   factory ApplicationData.fromJson(Map<String, dynamic> json) {
     Uint8List getUinit8List(data) {
@@ -72,18 +60,11 @@ class ApplicationData {
       appName: json["appName"] == null ? null : json["appName"],
       // icon: getUinit8List(json["icon"]),
       icon: getUinit8List(json["icon"]),
-      apkFilePath: json["apkFilePath"] == null ? null : json["apkFilePath"],
       packageName: json["packageName"] == null ? null : json["packageName"],
       versionName: json["versionName"] == null ? null : json["versionName"],
       versionCode: json["versionCode"] == null ? null : json["versionCode"],
-      dataDir: json["dataDir"] == null ? null : json["dataDir"],
-      systemApp: json["systemApp"] == null ? null : json["systemApp"],
       installTimeMillis:
           json["installTimeMillis"] == null ? null : json["installTimeMillis"],
-      updateTimeMillis:
-          json["updateTimeMillis"] == null ? null : json["updateTimeMillis"],
-      category: json["category"] == null ? null : json["category"],
-      enabled: json["enabled"] == null ? null : json["enabled"],
     );
   }
 
@@ -95,16 +76,10 @@ class ApplicationData {
     return {
       "appName": appName == null ? null : appName,
       "icon": icon == null ? null : getUinit8List(icon),
-      "apkFilePath": apkFilePath == null ? null : apkFilePath,
       "packageName": packageName == null ? null : packageName,
       "versionName": versionName == null ? null : versionName,
       "versionCode": versionCode == null ? null : versionCode,
-      "dataDir": dataDir == null ? null : dataDir,
-      "systemApp": systemApp == null ? null : systemApp,
       "installTimeMillis": installTimeMillis == null ? null : installTimeMillis,
-      "updateTimeMillis": updateTimeMillis == null ? null : updateTimeMillis,
-      "category": category == null ? null : category,
-      "enabled": enabled == null ? null : enabled,
     };
   }
 }

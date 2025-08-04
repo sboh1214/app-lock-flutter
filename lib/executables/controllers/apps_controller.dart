@@ -1,9 +1,10 @@
 import 'dart:developer';
 import 'dart:typed_data';
-import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:installed_apps/app_info.dart';
+import 'package:installed_apps/installed_apps.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app_lock_flutter/executables/controllers/method_channel_controller.dart';
 import 'package:app_lock_flutter/services/constant.dart';
@@ -18,7 +19,7 @@ class AppsController extends GetxController implements GetxService {
   TextEditingController typeAnswer = TextEditingController();
   TextEditingController checkAnswer = TextEditingController();
   TextEditingController searchApkText = TextEditingController();
-  List<Application> unLockList = [];
+  List<AppInfo> unLockList = [];
   List<ApplicationDataModel> searchedApps = [];
   List<ApplicationDataModel> lockList = [];
   List<String> selectLockList = [];
@@ -76,11 +77,7 @@ class AppsController extends GetxController implements GetxService {
   }
 
   getAppsData() async {
-    unLockList = await DeviceApps.getInstalledApplications(
-      includeAppIcons: true,
-      includeSystemApps: true,
-      onlyAppsWithLaunchIntent: true,
-    );
+    unLockList = await InstalledApps.getInstalledApps();
     excludeApps();
     update();
   }
@@ -100,16 +97,10 @@ class AppsController extends GetxController implements GetxService {
             ApplicationDataModel(
               isLocked: true,
               application: ApplicationData(
-                apkFilePath: app.apkFilePath,
                 appName: app.appName,
-                category: app.category,
-                dataDir: app.dataDir,
-                enabled: app.enabled,
                 icon: getAppIcon(app.appName),
                 installTimeMillis: app.installTimeMillis,
                 packageName: app.packageName,
-                systemApp: app.systemApp,
-                updateTimeMillis: app.updateTimeMillis,
                 versionCode: app.versionCode,
                 versionName: app.versionName,
               ),
@@ -127,33 +118,27 @@ class AppsController extends GetxController implements GetxService {
     update();
   }
 
-  addToLockedApps(Application app, context) async {
+  addToLockedApps(AppInfo app, context) async {
     addToAppsLoading = true;
     update([addRemoveToUnlockUpdate]);
     try {
-      if (selectLockList.contains(app.appName)) {
-        selectLockList.remove(app.appName);
-        lockList.removeWhere((em) => em.application!.appName == app.appName);
+      if (selectLockList.contains(app.name)) {
+        selectLockList.remove(app.name);
+        lockList.removeWhere((em) => em.application!.appName == app.name);
         log("REMOVE: $selectLockList");
       } else {
         if (lockList.length < 16) {
-          selectLockList.add(app.appName);
+          selectLockList.add(app.name);
           lockList.add(
             ApplicationDataModel(
               isLocked: true,
               application: ApplicationData(
-                apkFilePath: app.apkFilePath,
-                appName: app.appName,
-                category: "${app.category}",
-                dataDir: "${app.dataDir}",
-                enabled: app.enabled,
-                icon: (app as ApplicationWithIcon).icon,
-                installTimeMillis: "${app.installTimeMillis}",
+                appName: app.name,
+                icon: app.icon,
+                installTimeMillis: "${app.installedTimestamp}",
                 packageName: app.packageName,
-                systemApp: app.systemApp,
-                updateTimeMillis: '${app.updateTimeMillis}',
                 versionCode: '${app.versionCode}',
-                versionName: '${app.versionName}',
+                versionName: app.versionName,
               ),
             ),
           );
@@ -191,35 +176,29 @@ class AppsController extends GetxController implements GetxService {
   }
 
   Uint8List getAppIcon(String appName) {
-    return (unLockList[unLockList.indexWhere((element) {
-      return appName == element.appName;
-    })] as ApplicationWithIcon)
-        .icon;
+    return unLockList[unLockList.indexWhere((element) {
+      return appName == element.name;
+    })]
+        .icon!;
   }
 
   appSearch() {
     searchedApps.clear();
     if (searchApkText.text.length > 2) {
       for (var e in unLockList) {
-        if (e.appName
+        if (e.name
             .toUpperCase()
             .contains(searchApkText.text.toUpperCase().trim())) {
           searchedApps.add(
             ApplicationDataModel(
               isLocked: null,
               application: ApplicationData(
-                apkFilePath: e.apkFilePath,
-                appName: e.appName,
-                category: "${e.category}",
-                dataDir: "${e.dataDir}",
-                enabled: e.enabled,
-                icon: (e as ApplicationWithIcon).icon,
-                installTimeMillis: "${e.installTimeMillis}",
+                appName: e.name,
+                icon: e.icon,
+                installTimeMillis: "${e.installedTimestamp}",
                 packageName: e.packageName,
-                systemApp: e.systemApp,
-                updateTimeMillis: '${e.updateTimeMillis}',
                 versionCode: '${e.versionCode}',
-                versionName: '${e.versionName}',
+                versionName: e.versionName,
               ),
             ),
           );
